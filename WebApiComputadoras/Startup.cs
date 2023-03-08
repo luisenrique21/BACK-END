@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
-namespace WebApicomputadora
+namespace WebApicomputadoras
 {
     public class Startup
     {
@@ -13,10 +16,19 @@ namespace WebApicomputadora
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            services.AddDbContext<AplicationBDContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+            
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiComputadoras", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,6 +51,6 @@ namespace WebApicomputadora
                 endponits.MapControllers();
             });
         }
-
+        
     }
 }
