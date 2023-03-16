@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApicomputadoras.BD;
 using WebApicomputadoras.Migrations;
@@ -30,11 +30,11 @@ namespace WebApicomputadoras.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Tiendas tienda)
         {
-            var existeTienda = await DbContext.Tiendas.AnyAsync(x => x.Id == tienda.Id);
-            if(!existeTienda) 
-            {
-                return BadRequest($"No existe la tienda con el id:{tienda.Id}");
-            }
+            var existeTienda = await DbContext.Computadoras.AnyAsync(x => x.Id == tienda.Id);
+            //if(!existeTienda) 
+            //{
+            //   return BadRequest($"No existe la tienda con el id:{tienda.Id}");
+            //}
 
             DbContext.Add(tienda);
             await DbContext.SaveChangesAsync();
@@ -64,7 +64,7 @@ namespace WebApicomputadoras.Controllers
         {
             var existeTienda = await DbContext.Tiendas.AnyAsync(x => x.Id == id);
             if(!existeTienda) 
-            {
+            {   
                 return NotFound("El recurso no fue encontrado");
             }
 
@@ -74,3 +74,4 @@ namespace WebApicomputadoras.Controllers
         }
     }
 }
+
